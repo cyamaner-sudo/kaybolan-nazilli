@@ -1,5 +1,5 @@
 // Uygulama kabuğunu, verileri ve fotoğrafları önbelleğe alır; harita karoları çevrimiçi gelir.
-const SURUM = 'kn-20261030-1830';
+const SURUM = 'kn-20261030-2151';
 const DOSYALAR = [
  "./",
  "index.html",
@@ -41,6 +41,19 @@ const DOSYALAR = [
  "img/E08_fabrika_ataturk_inonu_1937.jpg",
  "img/E09_osmanli_bankasi_subesi_1930.jpg",
  "img/E10_osmanli_bankasi_subesi_salt.jpg",
+ "img/KN-03_kocacamii_1.jpg",
+ "img/KN-03_kocacamii_2.jpg",
+ "img/KN-07_etnografya_1.jpg",
+ "img/KN-07_etnografya_2.jpg",
+ "img/KN-09_lokomotif_1.jpg",
+ "img/KN-09_lokomotif_2.jpg",
+ "img/KN-09_lokomotif_3.jpg",
+ "img/KN-16_carsicamii_1.jpg",
+ "img/KN-16_carsicamii_2.jpg",
+ "img/KN-21_istasyonmeydani_1.jpg",
+ "img/KN-31_sumerilkokulu_1.jpg",
+ "img/KN-31_sumerilkokulu_2.jpg",
+ "img/KN-32_sumercamii_1.jpg",
  "img/akkurnaz2026_tahkimat_s22_2.jpg",
  "img/akkurnaz2026_tahkimat_s23_1.jpg",
  "img/akkurnaz2026_tahkimat_s23_3.jpg",

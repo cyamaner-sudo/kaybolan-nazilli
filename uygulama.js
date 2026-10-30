@@ -3,6 +3,7 @@
   'use strict';
   const D = window.KN_VERI;
   const YAPI = {};
+  const KESIN_KONUM = new Set(['OSM', 'Envanter kaydı']); // bunların dışındakiler haritada kesikli çerçeveyle gösterilir
   D.yapilar.forEach(y => { YAPI[y.id] = y; });
   const konumlu = D.yapilar.filter(y => y.lat != null);
   const merkezde = konumlu.filter(y => !y.uzak);
@@ -122,7 +123,7 @@
   function isaretCiz() {
     konumlu.forEach(y => {
       if (isaretler[y.id]) harita.removeLayer(isaretler[y.id]);
-      const yak = y.dogruluk !== 'OSM', gidildi = !!pasaport.ziyaret[y.id];
+      const yak = !KESIN_KONUM.has(y.dogruluk), gidildi = !!pasaport.ziyaret[y.id];
       const m = L.circleMarker([y.lat, y.lon], {
         radius: y.eski ? 11 : 8, color: yak ? '#000' : '#fff', weight: gidildi ? 4 : 2, dashArray: yak ? '3 3' : null,
         fillColor: renk(y.durum), fillOpacity: .92
@@ -466,7 +467,7 @@
     let enYakin = null, enYakinM = Infinity;
     konumlu.forEach(y => { const m = mesafe(sonKonum, [y.lat, y.lon]); if (m < enYakinM) { enYakinM = m; enYakin = y; } });
     if (!enYakin) return;
-    const esik = ayar.yaricap * (enYakin.dogruluk === 'OSM' ? 1 : 1.5); // yaklaşık konumlarda daha geniş
+    const esik = ayar.yaricap * (KESIN_KONUM.has(enYakin.dogruluk) ? 1 : 1.5); // yaklaşık konumlarda daha geniş
     if (enYakinM <= esik) ziyaretEt(enYakin.id, 'konum');
     if (enYakinM <= esik && !dinlenen.has(enYakin.id) && konusulan == null) {
       dinlenen.add(enYakin.id); depo.koy('dinlenen', [...dinlenen]);
