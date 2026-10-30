@@ -69,6 +69,9 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
     return r;
   }
   const adresler = [];
+  let islenen = {};
+  try { islenen = JSON.parse(sessionStorage.getItem('kn_islenen') || '{}'); } catch (e) { /* */ }
+  const gizli = (f, liste) => { const k = islenen[f.id]; if (!k || Date.now() - k.zaman > 180000) return false; return liste === 'bekleyen' || k.karar !== 'onay'; };
   async function resimYukle(img, id) {
     try { const b = await (await istek('/yonetici/resim/' + encodeURIComponent(id))).blob(); const u = URL.createObjectURL(b); adresler.push(u); img.src = u; }
     catch (e) { img.alt = 'Resim yüklenemedi'; }
@@ -90,14 +93,22 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
     d.querySelector('img').onclick = e => window.open(e.target.src, '_blank', 'noopener');
     d.querySelectorAll('[data-k]').forEach(b => b.onclick = async () => {
       const karar = b.dataset.k;
-      if (karar !== 'onay' && !confirm('Bu fotoğraf sunucudan tamamen silinecek. Emin misiniz?')) return;
+      // Silme iki adımlı: ilk dokunuşta onay istenir (bazı tarayıcılar confirm() penceresini göstermiyor)
+      if (karar !== 'onay' && !b.dataset.emin) {
+        b.dataset.emin = '1'; const eski = b.textContent; b.textContent = 'Emin misiniz? Silmek için tekrar dokunun';
+        setTimeout(() => { if (b.isConnected) { delete b.dataset.emin; b.textContent = eski; } }, 5000);
+        return;
+      }
+      d.querySelectorAll('button').forEach(x => { x.disabled = true; });
       const g = { id: f.id, karar };
       d.querySelectorAll('[data-a]').forEach(x => { g[x.dataset.a] = x.value; });
       try {
         await istek('/yonetici/karar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(g) });
         durum(karar === 'onay' ? (yayinda ? 'Kaydedildi.' : 'Onaylandı; birkaç dakika içinde uygulamada görünür.') : 'Silindi.');
+        // Sunucudaki liste bir dakikaya kadar eski kaydı göstermeye devam edebilir; işlenenleri bir süre gizle
+        islenen[f.id] = { karar, zaman: Date.now() }; try { sessionStorage.setItem('kn_islenen', JSON.stringify(islenen)); } catch (er) { /* */ }
         yukle();
-      } catch (e) { durum(e.message); }
+      } catch (e) { durum('İşlem yapılamadı: ' + e.message); d.querySelectorAll('button').forEach(x => { x.disabled = false; }); }
     });
     return d;
   }
@@ -105,6 +116,7 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
     adresler.splice(0).forEach(u => URL.revokeObjectURL(u));
     try {
       const l = await (await istek('/yonetici/liste')).json();
+      l.bekleyen = l.bekleyen.filter(f => !gizli(f, 'bekleyen')); l.onayli = l.onayli.filter(f => !gizli(f, 'onayli'));
       $('#panel').hidden = false; $('#cikis').hidden = false;
       $('#nBekleyen').textContent = l.bekleyen.length; $('#nOnayli').textContent = l.onayli.length;
       $('#bekleyen').replaceChildren(...(l.bekleyen.length ? l.bekleyen.map(f => kart(f, false)) : [Object.assign(document.createElement('p'), { className: 'bos', textContent: 'Onay bekleyen fotoğraf yok.' })]));
