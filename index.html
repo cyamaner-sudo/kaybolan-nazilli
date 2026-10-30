@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8a4b2a">
+<meta name="description" content="Nazilli'nin kaybolan ve risk altındaki tarihi yapılarını konumla anlatan gezi rehberi">
+<title>Kaybolan Nazilli</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="ikon/ikon-192.png">
+<link rel="apple-touch-icon" href="ikon/ikon-192.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+<header class="ust">
+  <h1>Kaybolan Nazilli</h1>
+  <button id="konumBtn" class="hap" aria-pressed="false">📍 Gezintiyi başlat</button>
+</header>
+
+<main>
+  <section id="sekme-harita" class="sekme aktif">
+    <div id="harita"></div>
+    <div id="yonKutusu" class="yon-kutusu" hidden>
+      <div id="yonOk" class="yon-ok" aria-hidden="true">➤</div>
+      <div><div id="yonAd" class="yon-ad"></div><div id="yonMesafe" class="yon-mesafe"></div></div>
+      <button id="pusulaBtn" class="hap kucuk" hidden>🧭 Pusula</button>
+    </div>
+    <div id="durumCubugu" class="durum-cubugu" role="status" aria-live="polite">Gezintiyi başlatınca yakınınızdaki yapılar otomatik anlatılır.</div>
+  </section>
+
+  <section id="sekme-rotalar" class="sekme">
+    <h2>Rotalar</h2>
+    <p class="aciklama">Hazır bir rota seçin ya da durakları kendiniz seçip rota oluşturun. Mesafe ve süre yürüyüşe göre tahmindir. Gezmeye gidemiyorsanız "Evden dinle" ile rotayı sesli dinleyebilirsiniz.</p>
+    <div id="hazirRotalar"></div>
+    <h3>Kendi rotanı oluştur</h3>
+    <p class="aciklama">Görmek istediğin yerleri işaretle. Sıralama, bulunduğun yerden (konum yoksa ilk seçtiğin duraktan) en kısa yürüyüşe göre yapılır.</p>
+    <div id="durakSecimi" class="durak-secimi"></div>
+    <button id="rotaOlustur" class="ana-btn">Rotayı oluştur</button>
+    <div id="rotaOzeti" class="rota-ozeti" hidden></div>
+  </section>
+
+  <section id="sekme-liste" class="sekme">
+    <h2>Yapılar</h2>
+    <div class="filtre" role="group" aria-label="Duruma göre süz">
+      <button data-f="hepsi" class="hap secili">Hepsi</button>
+      <button data-f="yakin" class="hap">En yakın</button>
+      <button data-f="yikilmis" class="hap">Yıkılmış</button>
+      <button data-f="risk" class="hap">Risk altında</button>
+      <button data-f="ayakta" class="hap">Ayakta</button>
+      <button data-f="nerede" class="hap">🔎 Bu nerede?</button>
+    </div>
+    <ul id="yapiListesi" class="yapi-listesi"></ul>
+    <h3>🎬 Nazilli'nin dünü: videolar</h3>
+    <div id="genelVideolar"></div>
+  </section>
+
+  <section id="sekme-pasaport" class="sekme">
+    <h2>Gezi pasaportum</h2>
+    <div id="pasaportOzet" class="pasaport-ozet"></div>
+    <div id="damgalar" class="damgalar"></div>
+    <h3>Rozetler</h3>
+    <div id="rozetler" class="rozetler"></div>
+    <button id="pasaportPaylas" class="ana-btn">Pasaportumu paylaş</button>
+    <h3>Çektiğim dün/bugün fotoğrafları</h3>
+    <p class="aciklama">Bir yapının kartında "📷 Aynı açıdan çek" ile çektiğiniz fotoğraflar burada saklanır (yalnızca bu telefonda).</p>
+    <div id="cektiklerim" class="cektiklerim"></div>
+    <h3>Dedektif notlarım</h3>
+    <p class="aciklama">"Bu nerede?" görevlerinde işaretlediğiniz yerler. Öğretmeninize gönderin.</p>
+    <div id="dedektifNotlari"></div>
+  </section>
+
+  <section id="sekme-ayarlar" class="sekme">
+    <h2>Ayarlar</h2>
+    <label class="ayar"><input type="checkbox" id="otoAnlat" checked> Yaklaşınca otomatik sesli anlat</label>
+    <label class="ayar"><input type="checkbox" id="titresim" checked> Yaklaşınca titret / sesli uyar</label>
+    <label class="ayar"><input type="checkbox" id="sapmaUyar" checked> Rotadan çıkınca uyar</label>
+    <label class="ayar">Yaklaşma mesafesi: <output id="yaricapDeger">40</output> m
+      <input type="range" id="yaricap" min="15" max="120" step="5" value="40"></label>
+    <label class="ayar">Ses (sohbet ve kaydı olmayan anlatımlar için) <select id="sesSecimi" style="width:100%"></select></label>
+    <label class="ayar">Konuşma hızı: <output id="hizDeger">1.00</output>
+      <input type="range" id="hiz" min="0.7" max="1.3" step="0.05" value="1"></label>
+    <label class="ayar">Yazı boyutu: <output id="yaziDeger">100</output>%
+      <input type="range" id="yazi" min="90" max="140" step="10" value="100"></label>
+    <label class="ayar"><input type="checkbox" id="deneme"> Deneme modu: konumu haritaya dokunarak seç</label>
+    <button id="sifirla" class="hap">Dinlenenleri sıfırla</button>
+    <button id="hepsiniSifirla" class="hap">Pasaportu ve notları sil</button>
+    <h3>Hakkında</h3>
+    <p class="aciklama">Bu uygulama "Kaybolan Nazilli" öğrenci projesinin ürünüdür. Yapıların bilgileri yayınlanmış kaynaklardan derlenmiştir; her kartta kaynağı yazılıdır. Fotoğrafların hakları sahiplerine aittir. Harita: © OpenStreetMap katkıcıları. Yürüyüş rotası: OSRM (FOSSGIS).</p>
+    <p class="aciklama">Konumunuz, çektiğiniz fotoğraflar ve notlarınız yalnızca bu telefonda kalır. Nazlı Nine'ye yapay zekâ modunda soru sorduğunuzda yalnızca sorunuz ve yakınınızdaki yapının adı gönderilir; konumunuz gönderilmez. Rota çizilirken durakların konumu harita yönlendirme hizmetine (OSRM) gider.</p>
+    <p class="aciklama"><a href="qr.html">QR etiketlerini yazdır</a></p>
+    <p class="aciklama" id="surum"></p>
+  </section>
+</main>
+
+<nav class="alt" aria-label="Sekmeler">
+  <button data-s="harita" class="secili">🗺️<span>Harita</span></button>
+  <button data-s="rotalar">🚶<span>Rotalar</span></button>
+  <button data-s="liste">🏛️<span>Yapılar</span></button>
+  <button data-s="pasaport">🎫<span>Pasaport</span></button>
+  <button data-s="ayarlar">⚙️<span>Ayarlar</span></button>
+</nav>
+
+<div id="kart" class="kart" hidden role="dialog" aria-labelledby="kartBaslik">
+  <button class="kapat" id="kartKapat" aria-label="Kartı kapat">✕</button>
+  <div id="kartIcerik"></div>
+</div>
+
+<div id="pencere" class="pencere" hidden role="dialog" aria-label="Geçmişe pencere">
+  <video id="kamera" playsinline muted autoplay></video>
+  <img id="hayalet" alt="">
+  <div class="pencere-ust"><span id="pencereBaslik"></span><button id="pencereKapat" class="hap kucuk">✕ Kapat</button></div>
+  <div class="pencere-alt">
+    <label>Eski fotoğraf: <input type="range" id="saydamlik" min="0" max="100" value="50"></label>
+    <div class="pencere-dugmeler">
+      <button id="cekBtn" class="ana-btn">📷 Çek</button>
+    </div>
+    <p id="pencereIpucu" class="pencere-ipucu">Telefonu, eski fotoğraftaki binanın çizgileri canlı görüntüyle örtüşene kadar oynatın.</p>
+  </div>
+</div>
+
+<div id="buyut" class="buyut" hidden><img alt=""><p></p></div>
+<div id="bildirim" class="bildirim" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="veri.js"></script>
+<script src="uygulama.js"></script>
+<script src="sohbet.js"></script>
+</body>
+</html>

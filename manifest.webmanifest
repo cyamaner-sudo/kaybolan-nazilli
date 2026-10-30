@@ -1,0 +1,15 @@
+{
+  "name": "Kaybolan Nazilli",
+  "short_name": "Kaybolan Nazilli",
+  "description": "Nazilli'nin kaybolan ve risk altındaki tarihi yapılarını konumla anlatan gezi rehberi",
+  "lang": "tr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf8f4",
+  "theme_color": "#8a4b2a",
+  "icons": [
+    { "src": "ikon/ikon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "ikon/ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

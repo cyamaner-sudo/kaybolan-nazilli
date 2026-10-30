@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR Etiketleri</title>
+<style>
+:root{--fg:#1f2328;--muted:#5d6670;--accent:#8a4b2a;--line:#d8d2c6;--bg:#fff}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--fg);background:var(--bg)}
+.ust{padding:16px;border-bottom:1px solid var(--line)}
+.ust h1{margin:0 0 6px;color:var(--accent);font-size:20px}
+.ust p{margin:4px 0;color:var(--muted);font-size:14px;max-width:70ch}
+.ust input{width:min(100%,520px);padding:8px;font-size:15px}
+.ust button{padding:8px 14px;font-size:15px;margin-top:6px}
+.etiketler{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:16px}
+.etiket{border:2px solid var(--accent);border-radius:12px;padding:12px;text-align:center;break-inside:avoid}
+.etiket h2{font-size:16px;margin:0 0 4px}
+.etiket p{font-size:12px;color:var(--muted);margin:4px 0}
+.etiket .qr{display:flex;justify-content:center;margin:8px 0}
+.etiket .marka{font-weight:700;color:var(--accent);font-size:13px}
+@media print{.ust{display:none}.etiketler{padding:0}}
+</style>
+</head>
+<body>
+<div class="ust">
+  <h1>QR etiketleri</h1>
+  <p>Her yapının önüne konacak etiket. Okutulunca uygulama o yapının kartını açar ve gezi pasaportuna damga basar. Uygulamanın yayınlandığı adresi yazıp yazdırın.</p>
+  <input id="taban" aria-label="Uygulama adresi"> <button id="yenile">Güncelle</button> <button onclick="print()">Yazdır</button>
+</div>
+<div class="etiketler" id="etiketler"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="veri.js"></script>
+<script>
+(function () {
+  const D = window.KN_VERI;
+  const varsayilan = location.href.replace(/qr\.html.*$/, 'index.html');
+  let taban = varsayilan;
+  try { taban = localStorage.getItem('kn_qr_taban') || varsayilan; } catch (e) { /* */ }
+  const g = document.getElementById('taban'); g.value = taban;
+  function ciz() {
+    const kutu = document.getElementById('etiketler'); kutu.innerHTML = '';
+    D.yapilar.filter(y => y.lat != null).forEach(y => {
+      const e = document.createElement('div'); e.className = 'etiket';
+      const h = document.createElement('h2'); h.textContent = y.ad;
+      const p = document.createElement('p'); p.textContent = y.tur + ' · ' + y.donem;
+      const q = document.createElement('div'); q.className = 'qr';
+      const m = document.createElement('div'); m.className = 'marka'; m.textContent = 'Kaybolan Nazilli · okut, dinle, keşfet';
+      e.append(h, p, q, m); kutu.appendChild(e);
+      new QRCode(q, { text: g.value.trim() + '#yapi=' + y.id + '&qr=1', width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+    });
+  }
+  document.getElementById('yenile').onclick = () => { try { localStorage.setItem('kn_qr_taban', g.value.trim()); } catch (e) { /* */ } ciz(); };
+  ciz();
+})();
+</script>
+</body>
+</html>
