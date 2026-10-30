@@ -294,6 +294,7 @@
       ${testHtml(y)}
       ${(y.ek_fotolar || []).length ? `<h3>Arşivden</h3><div class="ciftler">${y.ek_fotolar.map(f => foto(f, f.etiket || 'Arşiv')).join('')}</div>` : ''}
       ${videolar ? `<h3>Videolar</h3>${videolar}` : ''}
+      <div id="ziyaretciFotolari" class="ziyaretci"></div>
       <p class="kaynak">Kaynak: ${esc(y.kaynak)}</p>`;
     $('#kart').hidden = false;
     if (!yenile) $('#kart').scrollTop = 0;
@@ -305,6 +306,7 @@
     const bb = $('#biliyorumBtn'); if (bb) bb.onclick = () => dedektifBaslat(id);
     $('#paylasBtn').onclick = () => paylas(y.ad + ' – Kaybolan Nazilli', y.anlatim.slice(0, 140) + '…', location.href.split('#')[0] + '#yapi=' + id);
     videoBagla($('#kartIcerik'));
+    if (window.KN_ZIYARETCI) window.KN_ZIYARETCI.kartaEkle(id, $('#ziyaretciFotolari'));
     karsilastirBagla(); testBagla(id); oynatDugmesi();
     if (otomatik && ayar.oto) konus(id);
     if (y.lat != null && !otomatik && !yenile) harita.panTo([y.lat, y.lon]);

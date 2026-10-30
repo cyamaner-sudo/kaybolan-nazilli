@@ -10,11 +10,14 @@
 <link rel="icon" href="ikon/ikon-192.png">
 <link rel="apple-touch-icon" href="ikon/ikon-192.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap">
 <link rel="stylesheet" href="stil.css">
 </head>
 <body>
 <header class="ust">
-  <h1>Kaybolan Nazilli</h1>
+  <h1><a href="#" data-sayfa="sayfa-giris" class="logo-baglanti">Kaybolan Nazilli</a></h1>
   <button id="konumBtn" class="hap" aria-pressed="false">📍 Gezintiyi başlat</button>
 </header>
 
@@ -85,10 +88,14 @@
     <label class="ayar"><input type="checkbox" id="deneme"> Deneme modu: konumu haritaya dokunarak seç</label>
     <button id="sifirla" class="hap">Dinlenenleri sıfırla</button>
     <button id="hepsiniSifirla" class="hap">Pasaportu ve notları sil</button>
-    <h3>Hakkında</h3>
-    <p class="aciklama">Bu uygulama "Kaybolan Nazilli" öğrenci projesinin ürünüdür. Yapıların bilgileri yayınlanmış kaynaklardan derlenmiştir; her kartta kaynağı yazılıdır. Fotoğrafların hakları sahiplerine aittir. Harita: © OpenStreetMap katkıcıları. Yürüyüş rotası: OSRM (FOSSGIS).</p>
-    <p class="aciklama">Konumunuz, çektiğiniz fotoğraflar ve notlarınız yalnızca bu telefonda kalır. Nazlı Nine'ye yapay zekâ modunda soru sorduğunuzda yalnızca sorunuz ve yakınınızdaki yapının adı gönderilir; konumunuz gönderilmez. Rota çizilirken durakların konumu harita yönlendirme hizmetine (OSRM) gider.</p>
-    <p class="aciklama"><a href="qr.html">QR etiketlerini yazdır</a></p>
+    <h3>Uygulama</h3>
+    <div class="ayar-baglantilar">
+      <button class="hap" data-sayfa="sayfa-kilavuz">📖 Nasıl kullanılır?</button>
+      <button class="hap" data-sayfa="sayfa-hakkinda">ℹ️ Hakkında</button>
+      <button class="hap" data-sayfa="sayfa-paylas">📤 Fotoğraf paylaş</button>
+      <button class="hap" data-sayfa="sayfa-giris">🏠 Giriş sayfası</button>
+    </div>
+    <p class="aciklama">TÜBİTAK 2204-A Lise Öğrencileri Araştırma Projeleri kapsamında araştırmacılar tarafından geliştirilmiştir.</p>
     <p class="aciklama" id="surum"></p>
   </section>
 </main>
@@ -122,9 +129,101 @@
 <div id="buyut" class="buyut" hidden><img alt=""><p></p></div>
 <div id="bildirim" class="bildirim" hidden></div>
 
+<!-- ===== Giriş sayfası ===== -->
+<section id="sayfa-giris" class="sayfa giris" hidden aria-labelledby="girisBaslik">
+  <div class="giris-arka" aria-hidden="true"></div>
+  <div class="giris-icerik">
+    <p class="giris-ust">TÜBİTAK 2204-A Araştırma Projesi</p>
+    <h1 id="girisBaslik">Kaybolan<br>Nazilli</h1>
+    <p class="giris-alt">Yıkılan, unutulan, yok olmak üzere olan yapıların izinde. Dünü ve bugünü aynı karede gör, Nazlı Nine'den dinle.</p>
+    <div class="giris-sayilar" id="girisSayilar"></div>
+    <button id="basla" class="giris-basla">Keşfe Başla</button>
+    <div class="giris-baglantilar">
+      <a href="#" data-sayfa="sayfa-kilavuz">Nasıl kullanılır?</a>
+      <a href="#" data-sayfa="sayfa-paylas">Fotoğrafını paylaş</a>
+      <a href="#" data-sayfa="sayfa-hakkinda">Hakkında</a>
+    </div>
+    <p class="giris-dip">TÜBİTAK 2204-A Lise Öğrencileri Araştırma Projeleri kapsamında araştırmacılar tarafından geliştirilmiştir.</p>
+  </div>
+</section>
+
+<!-- ===== Kullanım kılavuzu ===== -->
+<section id="sayfa-kilavuz" class="sayfa metin-sayfa" hidden aria-labelledby="kilavuzBaslik">
+  <header class="sayfa-ust"><button class="hap kucuk" data-sayfa="kapat" aria-label="Kapat">✕</button></header>
+  <h2 id="kilavuzBaslik">Nasıl kullanılır?</h2>
+  <ol class="adimlar">
+    <li><b>Keşfe Başla.</b> Haritada her nokta bir tarihi yapı. Renkler yapının bugünkü durumunu gösterir:
+      <span class="renk" style="background:var(--yik)"></span> yıkılmış,
+      <span class="renk" style="background:var(--risk)"></span> risk altında,
+      <span class="renk" style="background:var(--ayk)"></span> ayakta ya da değişmiş,
+      <span class="renk" style="background:var(--bil)"></span> bilinmiyor. Büyük noktaların eski fotoğrafı vardır; kesikli çerçeve, yerin yaklaşık olduğunu gösterir.</li>
+    <li><b>📍 Gezintiyi başlat.</b> Konum izni verin. Bir yapıya yaklaştığınızda telefon titrer ve Nazlı Nine o yapıyı sesli anlatır. Telefonun ekranını açık tutun; ekran kilitlenirse konum takibi durur.</li>
+    <li><b>Yapı kartı.</b> Bir noktaya dokununca açılır:
+      <ul>
+        <li><b>▶ Dinle:</b> Anlatımı dinleyin.</li>
+        <li><b>Dün / bugün:</b> Fotoğrafın üzerindeki çizgiyi parmağınızla kaydırarak eski ve yeni hâli karşılaştırın.</li>
+        <li><b>💬 Nine'ye sor:</b> Yapı hakkında yazarak ya da 🎤 ile konuşarak soru sorun.</li>
+        <li><b>🪟 Geçmişe pencere:</b> Eski fotoğraf kameranızın üzerine yarı saydam gelir; yapının eskiden nasıl göründüğünü yerinde görün.</li>
+        <li><b>📷 Aynı açıdan çek:</b> Eski fotoğrafla aynı açıyı yakalayıp bugünün fotoğrafını çekin; pasaportunuza kaydedilir.</li>
+        <li><b>❓ Soru:</b> Kısa bilgi sorusunu cevaplayın, puan kazanın.</li>
+      </ul></li>
+    <li><b>🚶 Rotalar.</b> Hazır rotalardan birini seçin ya da görmek istediğiniz yapıları işaretleyip kendi rotanızı oluşturun. Ok sıradaki durağı gösterir; rotadan çıkarsanız uyarılırsınız. Gidemiyorsanız <b>🎧 Evden dinle</b> ile rotayı sanal olarak dolaşın.</li>
+    <li><b>🎫 Pasaport.</b> Gezdiğiniz yapılar damgalanır, rozetler kazanırsınız. Pasaportunuzu görsel olarak paylaşabilirsiniz.</li>
+    <li><b>🔎 Bu nerede?</b> Yeri bilinmeyen yapıların kartında "Yerini biliyorum"a basıp haritada yerini işaretleyin; notunuzu öğretmeninize gönderin.</li>
+    <li><b>📤 Fotoğrafını paylaş.</b> Evinizdeki albümlerde Nazilli'nin eski fotoğrafları mı var? Paylaşın; yönetici onayından sonra ilgili yapının kartında "Ziyaretçilerden" bölümünde yayınlanır.</li>
+    <li><b>Yerinde değilseniz:</b> Ayarlar'da <b>Deneme modu</b>nu açıp haritaya dokunarak "oradaymış gibi" gezebilirsiniz. Yapıların önündeki QR etiketlerini okutarak da kartları açabilirsiniz.</li>
+  </ol>
+  <div class="uyari-kutu"><b>Güvenliğiniz için:</b> Yıkık ve harap yapılara, demiryolu hattına ve antik kalıntıların üzerine girmeyin. Gezilere bir büyüğünüzle çıkın, trafiğe dikkat edin; yürürken ekrana değil yola bakın.</div>
+  <button class="ana-btn" data-sayfa="kapat">Anladım</button>
+</section>
+
+<!-- ===== Hakkında ===== -->
+<section id="sayfa-hakkinda" class="sayfa metin-sayfa" hidden aria-labelledby="hakkindaBaslik">
+  <header class="sayfa-ust"><button class="hap kucuk" data-sayfa="kapat" aria-label="Kapat">✕</button></header>
+  <h2 id="hakkindaBaslik">Hakkında</h2>
+  <p><b>Kaybolan Nazilli</b>, TÜBİTAK 2204-A Lise Öğrencileri Araştırma Projeleri kapsamında araştırmacılar tarafından geliştirilmiştir.</p>
+  <h3>Neden?</h3>
+  <p>Nazilli'nin tarihi yapıları deprem, bakımsızlık, kentleşme ve işlev kaybıyla birer birer yok oluyor; yıkılan bir yapıyla birlikte ona bağlı anılar ve yer adları da unutuluyor. Bu proje, kaybolan ve risk altındaki yapıları belgelemeyi, eski fotoğrafları bugünkü hâlleriyle aynı açıdan karşılaştırarak değişimi görünür kılmayı ve gençlerin yerel mirası yerinde, gezerek öğrenmesini amaçlar.</p>
+  <h3>Nasıl hazırlandı?</h3>
+  <p>Yapı envanteri; akademik tezler, makaleler, kitaplar, arşiv kayıtları ve basından derlendi, Coğrafi Bilgi Sistemleri (CBS) ile haritalandı. Eski ve yeni fotoğraflar aynı açıdan eşleştirildi. Her yapı kartında bilginin kaynağı yazılıdır. Konumu "yaklaşık" olan yapıların yeri saha çalışmasıyla düzeltilecektir.</p>
+  <h3>Nazlı Nine</h3>
+  <p>Nazlı Nine gerçek bir kişi değil, öğrencilerin hazırladığı kurgusal bir anlatıcıdır. Anlatımlar yapay zekâ ile seslendirilmiştir. Sohbette yapay zekâ kullanılır ve yalnızca uygulamadaki bilgilere dayanması istenmiştir; yine de hata yapabilir. Önemli bilgileri kaynaklardan kontrol edin.</p>
+  <h3>Fotoğraflar ve haklar</h3>
+  <p>Fotoğrafların hakları sahiplerine aittir; her fotoğrafın kaynağı altında yazılıdır. Ziyaretçilerin paylaştığı fotoğraflar yönetici onayından sonra, paylaşanın belirttiği adla yayınlanır. Hak sahibi olarak bir fotoğrafın kaldırılmasını isterseniz bize bildirin.</p>
+  <h3>Gizlilik</h3>
+  <p>Uygulamada hesap ve reklam yoktur. Konumunuz, çektiğiniz fotoğraflar, puanlarınız ve notlarınız yalnızca bu telefonda kalır. Nine'ye soru sorduğunuzda yalnızca sorunuz ve yakınınızdaki yapının adı sunucuya gönderilir; konumunuz gönderilmez. Rota çizilirken durakların konumu harita yönlendirme hizmetine (OSRM) gider. Paylaştığınız fotoğraflar telefonda küçültülür ve içindeki konum ve cihaz bilgileri silinerek gönderilir. Sohbete ve fotoğraf açıklamalarına ad, adres, telefon gibi kişisel bilgiler yazmayın.</p>
+  <h3>Teşekkür ve kaynaklar</h3>
+  <p>Harita: © OpenStreetMap katkıcıları. Yürüyüş rotası: OSRM (FOSSGIS). Arşiv fotoğrafları: kaynakları kartlarda belirtilen tez, makale, kitap ve arşivler.</p>
+  <p><a href="qr.html">QR etiketlerini yazdır</a></p>
+  <p class="aciklama" id="surumHakkinda"></p>
+  <button class="ana-btn" data-sayfa="kapat">Kapat</button>
+</section>
+
+<!-- ===== Fotoğraf paylaşma ===== -->
+<section id="sayfa-paylas" class="sayfa metin-sayfa" hidden aria-labelledby="paylasBaslik">
+  <header class="sayfa-ust"><button class="hap kucuk" data-sayfa="kapat" aria-label="Kapat">✕</button></header>
+  <h2 id="paylasBaslik">Fotoğrafını paylaş</h2>
+  <p class="aciklama">Ailenizin albümünde Nazilli'nin eski bir fotoğrafı mı var? Ya da bir yapının bugünkü hâlini mi çektiniz? Paylaşın; yönetici inceleyip onayladıktan sonra uygulamada yayınlanır.</p>
+  <form id="payForm" class="pay-form">
+    <label>Fotoğraf <input id="payDosya" type="file" accept="image/*" required></label>
+    <div id="payOnizleme" class="pay-onizleme"></div>
+    <label>Hangi yapı? <select id="payYapi"></select></label>
+    <label>Tahmini yıl <input id="payYil" maxlength="30" placeholder="ör. 1960'lar, 1975"></label>
+    <label>Fotoğrafta ne var? <textarea id="payAciklama" maxlength="220" rows="3" placeholder="ör. Uzun Çarşı'nın girişi, bayram günü"></textarea></label>
+    <label>Fotoğrafın sahibi <input id="paySahip" maxlength="60" placeholder="ör. Babaannemin albümü"></label>
+    <label>Hangi adla yayınlansın? <input id="payAd" maxlength="40" placeholder="Ad ya da takma ad (boş bırakılırsa: İsimsiz katkıcı)"></label>
+    <label class="izin"><input id="payIzin" type="checkbox"> Bu fotoğrafı ben çektim ya da sahibinden izin aldım; uygulamada yayınlanmasına izin veriyorum. 18 yaşından küçüksem velim bu paylaşımdan haberdar.</label>
+    <p class="aciklama">Lütfen tanınabilir yüzlerin, özellikle çocukların yer aldığı fotoğrafları kişilerin izni olmadan göndermeyin. Fotoğraf telefonunuzda küçültülür; içindeki konum ve cihaz bilgileri silinir.</p>
+    <button id="payGonder" class="ana-btn" type="submit">Gönder</button>
+    <p id="payDurum" class="pay-durum" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="veri.js"></script>
 <script src="uygulama.js"></script>
 <script src="sohbet.js"></script>
+<script src="sayfalar.js"></script>
 </body>
 </html>

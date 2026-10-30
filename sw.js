@@ -1,11 +1,12 @@
 // Uygulama kabuğunu, verileri ve fotoğrafları önbelleğe alır; harita karoları çevrimiçi gelir.
-const SURUM = 'kn-20261030-1147';
+const SURUM = 'kn-20261030-1207';
 const DOSYALAR = [
  "./",
  "index.html",
  "stil.css",
  "uygulama.js",
  "sohbet.js",
+ "sayfalar.js",
  "veri.js",
  "qr.html",
  "manifest.webmanifest",
@@ -177,7 +178,7 @@ self.addEventListener('fetch', e => {
     }))));
     return;
   }
-  if (u.hostname.startsWith('routing.')) return;
+  if (u.hostname.startsWith('routing.') || u.hostname.endsWith('workers.dev')) return; // canlı sunucu istekleri önbelleğe girmez
   if (u.pathname.includes('/ses/') && u.pathname.endsWith('.mp3')) {
     // Anlatım sesleri dinlendikçe saklanır (hepsini baştan indirmek ~8 MB olurdu)
     e.respondWith(caches.open('kn-ses').then(c => c.match(e.request).then(r => r || fetch(e.request).then(n => { if (n.ok) c.put(e.request, n.clone()); return n; }))));
