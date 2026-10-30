@@ -94,6 +94,7 @@
   const pasaport = Object.assign({ ziyaret: {}, test: {}, puan: 0 }, depo.al('pasaport', {}));
   const pasaportKaydet = () => depo.koy('pasaport', pasaport);
   let dedektif = depo.al('dedektif', []);
+  const gonderilen = depo.al('gonderilen', []); // projeye gönderilen "aynı açıdan" çekimlerin anahtarları
   $('#sifirla').onclick = () => { dinlenen = new Set(); depo.koy('dinlenen', []); bildir('Dinlenen yapılar sıfırlandı'); };
   $('#hepsiniSifirla').onclick = async () => {
     if (!confirm('Pasaport, quiz puanları, dedektif notları ve çektiğiniz fotoğraflar bu telefondan silinsin mi?')) return;
@@ -405,9 +406,17 @@
     $('#cektiklerim').innerHTML = fotolar.length ? fotolar.sort((a, b) => b.tarih.localeCompare(a.tarih)).map(f => {
       const u = URL.createObjectURL(f.blob); blobAdresleri.push(u);
       return `<figure><img src="${u}" alt="" data-alt="${esc(f.ad + ' · ' + new Date(f.tarih).toLocaleString('tr-TR'))}">
-        <figcaption>${esc(f.ad)}<br><button class="hap kucuk" data-paylas="${esc(f.anahtar)}">Paylaş</button> <button class="hap kucuk" data-sil="${esc(f.anahtar)}">Sil</button></figcaption></figure>`;
+        <figcaption>${esc(f.ad)}<br>${gonderilen.includes(f.anahtar) ? '<span class="kaynak">✓ Projeye gönderildi</span><br>' : `<button class="hap kucuk" data-proje-foto="${esc(f.anahtar)}">📤 Projeye gönder</button><br>`}<button class="hap kucuk" data-paylas="${esc(f.anahtar)}">Paylaş</button> <button class="hap kucuk" data-sil="${esc(f.anahtar)}">Sil</button></figcaption></figure>`;
     }).join('') : '<p class="aciklama">Henüz fotoğraf yok.</p>';
     $('#cektiklerim').onclick = async e => {
+      const pf = e.target.closest('[data-proje-foto]');
+      if (pf) { // ilk dokunuşta izin metni gösterilir, ikinci dokunuşta gönderilir
+        if (!pf.dataset.emin) { pf.dataset.emin = '1'; pf.textContent = 'Bu fotoğrafı ben çektim; yayınlanmasına izin veriyorum. Göndermek için tekrar dokunun'; return; }
+        const f = fotolar.find(x => x.anahtar === pf.dataset.projeFoto); pf.disabled = true; pf.textContent = 'Gönderiliyor…';
+        try { await window.KN_ZIYARETCI.sahaGonder(f); gonderilen.push(f.anahtar); depo.koy('gonderilen', gonderilen); bildir('Fotoğraf projeye gönderildi 📤'); pasaportCiz(); }
+        catch (er) { pf.disabled = false; delete pf.dataset.emin; pf.textContent = '📤 Projeye gönder'; bildir((er.message || 'Gönderilemedi') + '; tekrar deneyin'); }
+        return;
+      }
       const p = e.target.closest('[data-paylas]'), s = e.target.closest('[data-sil]');
       if (p) { const f = fotolar.find(x => x.anahtar === p.dataset.paylas); paylas(f.ad, 'Kaybolan Nazilli: ' + f.ad + ' bugün', '', new File([f.blob], f.anahtar + '.jpg', { type: 'image/jpeg' })); }
       if (s && confirm('Bu fotoğraf silinsin mi?')) { await fotoDepo.sil(s.dataset.sil); pasaportCiz(); }

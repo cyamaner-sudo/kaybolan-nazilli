@@ -1,6 +1,6 @@
 // Otomatik üretildi: araclar/uygulama_veri.py – elle düzenlemeyin
 window.KN_VERI = {
- "surum": "20261030-2200",
+ "surum": "20261030-2343",
  "merkez": [
   37.9125,
   28.3262
@@ -106,10 +106,10 @@ window.KN_VERI = {
    },
    "kaynak": "Nazilli Ticaret Odası; Milliyet yerel haber (Koca Camii şadırvanı)",
    "eski": {
-    "img": "E06_genel_gorunus.jpg",
-    "yil": "Bilinmiyor",
-    "kaynak": "eskiturkiye.net",
-    "aciklama": "'Genel Görünüş Nazilli' kartpostalı; ortadaki cami büyük olasılıkla Koca Camii"
+    "img": "KN-03_kocacamii_1.jpg",
+    "yil": "1969 (satıcı bilgisi)",
+    "kaynak": "fotokart.shop (eski fotoğraf satıcısı), '1969 Nazilli Koca Camii Görünüş Fotoğraf' ilanı",
+    "aciklama": "Koca Camii s/b fotoğrafı: büyük kemerli giriş cephesi, kubbe ve TEK minare; cephe bugünküyle (B06) aynı, bugün iki minareli. Üzerinde satıcı filigranı var."
    },
    "bugun": {
     "img": "B06_koca_camii.jpg",
@@ -118,7 +118,7 @@ window.KN_VERI = {
     "aciklama": "Koca Camii"
    },
    "uzak": false,
-   "not": "Olası eşleşme: eski fotoğraftaki caminin cephesindeki büyük yarım daire kemer, bugünkü Koca Camii'ndekine benziyor. Eskide tek minare, bugün iki minare görünüyor. Doğrulanmalı.",
+   "not": "1969 ve bugün: cephe aynı; 1969'da cami tek minareliydi.",
    "ses": "KN-03.mp3?f43730d0d7",
    "videolar": [
     {
@@ -136,11 +136,11 @@ window.KN_VERI = {
    ],
    "ek_fotolar": [
     {
-     "img": "KN-03_kocacamii_1.jpg",
-     "yil": "1969 (satıcı bilgisi)",
-     "kaynak": "fotokart.shop (eski fotoğraf satıcısı), '1969 Nazilli Koca Camii Görünüş Fotoğraf' ilanı",
-     "aciklama": "Koca Camii s/b fotoğrafı: büyük kemerli giriş cephesi, kubbe ve TEK minare; cephe bugünküyle (B06) aynı, bugün iki minareli. Üzerinde satıcı filigranı var.",
-     "etiket": "1969"
+     "img": "E06_genel_gorunus.jpg",
+     "yil": "Bilinmiyor",
+     "kaynak": "eskiturkiye.net",
+     "aciklama": "'Genel Görünüş Nazilli' kartpostalı; ortadaki cami büyük olasılıkla Koca Camii",
+     "etiket": "Genel görünüm"
     },
     {
      "img": "KN-03_kocacamii_2.jpg",
@@ -484,10 +484,20 @@ window.KN_VERI = {
    "soru": "Buharlı bir lokomotifin sesi ve kokusu nasıl olurdu? Dedenize sorun.",
    "test": null,
    "kaynak": "OpenStreetMap (doğrulanmadı)",
-   "eski": null,
-   "bugun": null,
+   "eski": {
+    "img": "KN-09_lokomotif_1.jpg",
+    "yil": "6 Mart 1977",
+    "kaynak": "Robin Lush (fotoğrafçı) / Kent Stratejileri Merkezi, 'İzmir'in kara trenleri...' (26.11.2017)",
+    "aciklama": "TCDD 56911 buharlı lokomotifi İzmir Alsancak Garı'ndan ayrılırken (bugün Nazilli'de sergilenen lokomotif, seferdeyken). Numara görselde okunmuyor; kimlik fotoğrafçının özgün dosya adına dayanıyor, lokomotif tipi (Corpet-Louvet 2-10-0) görünüşle uyumlu."
+   },
+   "bugun": {
+    "img": "KN-09_lokomotif_3.jpg",
+    "yil": "Şubat 2017",
+    "kaynak": "Haberler.com, 'Nazilli'de Kara Tren Hangara Geldi' (23.02.2017, yerel haber)",
+    "aciklama": "'Kara Tren' TCDD 56911 Nazilli'de sergileme yerinde; kabin üzerinde TCDD ve 56911 plakaları okunuyor. Haber: lokomotif hangar (kafe) alanına getirildi."
+   },
    "uzak": false,
-   "not": "",
+   "not": "1977'de İzmir'de seferde (fotoğrafçının kaydına göre 56911) ve 2017'de Nazilli'de sergilenirken.",
    "ses": "KN-09.mp3?d9c2d73b7b",
    "videolar": [
     {
@@ -505,25 +515,11 @@ window.KN_VERI = {
    ],
    "ek_fotolar": [
     {
-     "img": "KN-09_lokomotif_1.jpg",
-     "yil": "6 Mart 1977",
-     "kaynak": "Robin Lush (fotoğrafçı) / Kent Stratejileri Merkezi, 'İzmir'in kara trenleri...' (26.11.2017)",
-     "aciklama": "TCDD 56911 buharlı lokomotifi İzmir Alsancak Garı'ndan ayrılırken (bugün Nazilli'de sergilenen lokomotif, seferdeyken). Numara görselde okunmuyor; kimlik fotoğrafçının özgün dosya adına dayanıyor, lokomotif tipi (Corpet-Louvet 2-10-0) görünüşle uyumlu.",
-     "etiket": "İzmir 1977"
-    },
-    {
      "img": "KN-09_lokomotif_2.jpg",
      "yil": "7 Mart 1977",
      "kaynak": "Robin Lush (fotoğrafçı) / Kent Stratejileri Merkezi, 'İzmir'in kara trenleri...' (26.11.2017)",
      "aciklama": "TCDD 56911 yolcu katarıyla İzmir Alsancak'tan çıkarken. Kimlik fotoğrafçının dosya adına dayanıyor (17537_56911_leaving_izmir_alsancak_7_march_77).",
      "etiket": "Seferde 1977"
-    },
-    {
-     "img": "KN-09_lokomotif_3.jpg",
-     "yil": "Şubat 2017",
-     "kaynak": "Haberler.com, 'Nazilli'de Kara Tren Hangara Geldi' (23.02.2017, yerel haber)",
-     "aciklama": "'Kara Tren' TCDD 56911 Nazilli'de sergileme yerinde; kabin üzerinde TCDD ve 56911 plakaları okunuyor. Haber: lokomotif hangar (kafe) alanına getirildi.",
-     "etiket": "Nazilli 2017"
     }
    ]
   },
@@ -971,18 +967,16 @@ window.KN_VERI = {
    "test": null,
    "kaynak": "Kültür Envanteri (kulturenvanteri.com/yer/carsi-camii-nazilli); 1853 vakıf kaydı",
    "eski": null,
-   "bugun": null,
+   "bugun": {
+    "img": "KN-16_carsicamii_1.jpg",
+    "yil": "Ekim 2021",
+    "kaynak": "Anıl Karadağ (fotoğrafçı) / Kültür Envanteri, 'Hacı Ali Ağa Camii, Nazilli' (KE No 38568)",
+    "aciklama": "Bugün 'ÇARŞI CAMİİ' tabelası taşıyan cami (tabela görselde okunuyor). Kültür Envanteri'nde 'Hacı Ali Ağa Camii, Nazilli', diğer adı Nazilli Çarşı Camii, 19. yy; konum 37.90349, 28.32207. 1853 vakıf kaydındaki 'Çarşı Câmi' ile aynı yapı olduğu ayrıca doğrulanmalı."
+   },
    "uzak": false,
-   "not": "",
+   "not": "Ekim 2021 hali (Kültür Envanteri). Eski fotoğrafı aranıyor.",
    "ses": "KN-16.mp3?8d7d181d78",
    "ek_fotolar": [
-    {
-     "img": "KN-16_carsicamii_1.jpg",
-     "yil": "Ekim 2021",
-     "kaynak": "Anıl Karadağ (fotoğrafçı) / Kültür Envanteri, 'Hacı Ali Ağa Camii, Nazilli' (KE No 38568)",
-     "aciklama": "Bugün 'ÇARŞI CAMİİ' tabelası taşıyan cami (tabela görselde okunuyor). Kültür Envanteri'nde 'Hacı Ali Ağa Camii, Nazilli', diğer adı Nazilli Çarşı Camii, 19. yy; konum 37.90349, 28.32207. 1853 vakıf kaydındaki 'Çarşı Câmi' ile aynı yapı olduğu ayrıca doğrulanmalı.",
-     "etiket": "2021"
-    },
     {
      "img": "KN-16_carsicamii_2.jpg",
      "yil": "Ekim 2021",
@@ -1345,9 +1339,14 @@ window.KN_VERI = {
     "kaynak": "eskiturkiye.net",
     "aciklama": "Nazilli İstasyon Meydanı"
    },
-   "bugun": null,
+   "bugun": {
+    "img": "KN-07_etnografya_2.jpg",
+    "yil": "12 Temmuz 2016",
+    "kaynak": "Erdalkara / Wikimedia Commons, 'Nazilli Etnoğrafya Müzesi 20160712 142538.jpg'",
+    "aciklama": "Etnografya Müzesi binası ve İstasyon Meydanı'ndan genel görünüş; binanın sağında (eski fotoğraftaki kemerli tek katlı yapının yerinde) çok katlı apartman. KN-07 için kesin; KN-25 için yalnızca konum karşılaştırması."
+   },
    "uzak": false,
-   "not": "Bugünkü fotoğraf öğrencilerce aynı açıdan çekilecek.",
+   "not": "Meydanın eski hali ve 2016'da müze binası önünden görünüm. Aynı açıdan çekim sahada yapılacak.",
    "ses": "KN-21.mp3?de480e962e",
    "ek_fotolar": [
     {
@@ -1703,9 +1702,14 @@ window.KN_VERI = {
     "kaynak": "Bigat 2017 (tez)",
     "aciklama": "Kurulduğu yıl Sümer İlkokulu"
    },
-   "bugun": null,
+   "bugun": {
+    "img": "KN-31_sumerilkokulu_2.jpg",
+    "yil": "y. 2010'lar (2017 öncesi)",
+    "kaynak": "İlhan Öden blogu, 'Yaşasın okulumuz' (1.5.2017); özgün kaynak muhtemelen okulun MEB sitesi",
+    "aciklama": "Pembe boyalı iki katlı okul binası (dosya adı 'sumer-mahallesi-huriyet-caddesi-nazilli'), aynı blog yazısında Sümer İlkokulu için kullanılmış. NOT: Yeni Kıroba haberine (9.8.2026) göre eski bina depreme dayanıksız bulunup yıkıldı, yerine yeni okul yapılıyor; bu fotoğraf yıkım öncesini gösteriyor olabilir."
+   },
    "uzak": false,
-   "not": "1946: kurulduğu yıl Sümer İlkokulu. Bugünkü fotoğrafı aynı açıdan çekilecek.",
+   "not": "1946'da kurulduğu yıl ve 2010'larda okul binası. Aynı açıdan çekim sahada yapılacak.",
    "ses": "KN-31.mp3?a5cafdf890",
    "ek_fotolar": [
     {
@@ -1714,13 +1718,6 @@ window.KN_VERI = {
      "kaynak": "İlhan Öden, 'TÜRKİYE'Yİ ve SÜMERBANK'ı çok seviyorum' blogu, 'Yaşasın okulumuz' (1.5.2017)",
      "aciklama": "Sümerbank yerleşkesinde iki katlı, kırma çatılı okul binası (s/b; üstüne blog metni ve nazillisumerbank.com logosu eklenmiş). Sümer İlkokulu yazısında kullanılmış ama 1946 fotoğrafındaki (Bigat s.245) cepheyle tam örtüşmüyor; sonraki ek bina ya da başka bir Sümer okulu olabilir.",
      "etiket": "Eski bina"
-    },
-    {
-     "img": "KN-31_sumerilkokulu_2.jpg",
-     "yil": "y. 2010'lar (2017 öncesi)",
-     "kaynak": "İlhan Öden blogu, 'Yaşasın okulumuz' (1.5.2017); özgün kaynak muhtemelen okulun MEB sitesi",
-     "aciklama": "Pembe boyalı iki katlı okul binası (dosya adı 'sumer-mahallesi-huriyet-caddesi-nazilli'), aynı blog yazısında Sümer İlkokulu için kullanılmış. NOT: Yeni Kıroba haberine (9.8.2026) göre eski bina depreme dayanıksız bulunup yıkıldı, yerine yeni okul yapılıyor; bu fotoğraf yıkım öncesini gösteriyor olabilir.",
-     "etiket": "2010'lar"
     }
    ]
   },
@@ -1753,19 +1750,15 @@ window.KN_VERI = {
     "kaynak": "Bigat 2017 (tez)",
     "aciklama": "Sümer Camii inşaatı"
    },
-   "bugun": null,
+   "bugun": {
+    "img": "KN-32_sumercamii_1.jpg",
+    "yil": "y. 2014 öncesi",
+    "kaynak": "İlhan Öden blogu, 'Farklı ve güzel Nazilli Sümerbank Basma Fabrikası Camii' (Ağustos 2014)",
+    "aciklama": "Sümerbank Basma Fabrikası Camii (Sümer Camii): şerefeli tek minare, kiremit çatılı yapı, önünde çocuk parkı. Eşleme blog yazısının başlığına dayanıyor (Kültür Envanteri: inşaatı 1951'de başladı, 1955'te açıldı)."
+   },
    "uzak": false,
-   "not": "Sümer Camii'nin inşaatı. Bugünkü fotoğrafı aynı açıdan çekilecek.",
-   "ses": "KN-32.mp3?3c012c67cd",
-   "ek_fotolar": [
-    {
-     "img": "KN-32_sumercamii_1.jpg",
-     "yil": "y. 2014 öncesi",
-     "kaynak": "İlhan Öden blogu, 'Farklı ve güzel Nazilli Sümerbank Basma Fabrikası Camii' (Ağustos 2014)",
-     "aciklama": "Sümerbank Basma Fabrikası Camii (Sümer Camii): şerefeli tek minare, kiremit çatılı yapı, önünde çocuk parkı. Eşleme blog yazısının başlığına dayanıyor (Kültür Envanteri: inşaatı 1951'de başladı, 1955'te açıldı).",
-     "etiket": "2010'lar"
-    }
-   ]
+   "not": "İnşaat yılları (1951-1955) ve 2010'larda cami. Aynı açıdan çekim sahada yapılacak.",
+   "ses": "KN-32.mp3?3c012c67cd"
   },
   {
    "id": "KN-33",

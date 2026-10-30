@@ -139,7 +139,17 @@
     kutu.querySelector('[data-paylas]').onclick = () => paylasAc(id);
     kutu.querySelector('[data-duzelt]').onclick = () => duzeltAc(id);
   }
-  window.KN_ZIYARETCI = { kartaEkle, paylasAc, duzeltAc };
+  // "Aynı açıdan çek" ile çekilen fotoğrafı (pasaporttaki Çektiklerim) yönetici onayına gönderir
+  async function sahaGonder(f) {
+    const fd = new FormData();
+    fd.append('resim', f.blob, 'saha.jpg'); fd.append('yapi', f.yapi); fd.append('izin', 'evet');
+    fd.append('yil', new Date(f.tarih).toLocaleDateString('tr-TR')); fd.append('aciklama', 'Aynı açıdan saha çekimi (eski fotoğrafla eşleştirmek için)');
+    fd.append('tur', 'saha'); if (f.konum) fd.append('konum', f.konum.map(x => x.toFixed(5)).join(', '));
+    const r = await fetch(SUNUCU() + '/fotolar/gonder', { method: 'POST', body: fd });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.hata || 'Gönderilemedi');
+  }
+  window.KN_ZIYARETCI = { kartaEkle, paylasAc, duzeltAc, sahaGonder };
   // QR bağlantısıyla gelindiyse kart bu betik yüklenmeden açılmış olabilir; ziyaretçi bölümünü şimdi doldur
   const ilkKart = (location.hash.match(/yapi=(KN-\d+)/) || [])[1], ilkKutu = $('#ziyaretciFotolari');
   if (ilkKart && ilkKutu && !ilkKutu.childElementCount) kartaEkle(ilkKart, ilkKutu);

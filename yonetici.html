@@ -33,6 +33,7 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
 .bildirimler .kart .ic{gap:5px}
 .etiket{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--accent);color:#fff;font-size:.78rem;font-weight:600}
 .metin{white-space:pre-wrap;line-height:1.45}
+.kart img.eski{max-height:160px;cursor:default}
 </style>
 </head>
 <body>
@@ -67,6 +68,7 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
   let sifre = '';
   try { sifre = sessionStorage.getItem('kn_yonetici') || ''; } catch (e) { /* */ }
   const yapiAd = id => (D.yapilar.find(y => y.id === id) || {}).ad || 'Yapı seçilmemiş';
+  const eskiFoto = id => { const y = D.yapilar.find(x => x.id === id); const e = y && (y.eski || y.bugun); return e ? 'img/' + e.img : ''; };
   const secenekler = sec => '<option value="">(yapı seçilmemiş)</option>' + D.yapilar.map(y => `<option value="${esc(y.id)}" ${y.id === sec ? 'selected' : ''}>${esc(y.ad)}</option>`).join('');
   const durum = t => { $('#durum').textContent = t; };
   async function istek(yol, secenek = {}) {
@@ -87,6 +89,8 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
     const d = document.createElement('div'); d.className = 'kart';
     d.innerHTML = `<img alt="Gönderilen fotoğraf">
       <div class="ic">
+        ${f.tur === 'saha' ? `<div><span class="etiket">Aynı açıdan saha çekimi</span>${f.konum ? ' · Çekim yeri: <a href="https://www.openstreetmap.org/?mlat=' + encodeURIComponent(f.konum.split(',')[0]) + '&mlon=' + encodeURIComponent((f.konum.split(',')[1] || '').trim()) + '#map=19/' + encodeURIComponent(f.konum.split(',')[0]) + '/' + encodeURIComponent((f.konum.split(',')[1] || '').trim()) + '" target="_blank" rel="noopener">' + esc(f.konum) + '</a>' : ''}</div>` : ''}
+        ${f.tur === 'saha' && eskiFoto(f.yapi) ? `<div class="meta">Eşleştirilecek eski fotoğraf:</div><img class="eski" src="${esc(eskiFoto(f.yapi))}" alt="Eski fotoğraf">` : ''}
         <div class="meta">Gönderildi: ${esc(new Date(f.tarih).toLocaleString('tr-TR'))}${f.onay ? ' · Onay: ' + esc(new Date(f.onay).toLocaleDateString('tr-TR')) : ''}</div>
         <div><b>Paylaşan:</b> ${esc(f.ad || 'İsimsiz katkıcı')} · <b>Sahibi:</b> ${esc(f.sahip || '—')}</div>
         <label>Yapı <select data-a="yapi">${secenekler(f.yapi)}</select></label>
