@@ -175,4 +175,5 @@ a{color:var(--accent)}
 .pay-durum{font-weight:600}
 .ayar-baglantilar{display:flex;flex-wrap:wrap;gap:8px}
 .ziyaretci{margin-top:12px}
+.ziyaretci .hap{margin:6px 6px 0 0;text-align:left}
 .sayfa h1:focus,.sayfa h2:focus{outline:none}

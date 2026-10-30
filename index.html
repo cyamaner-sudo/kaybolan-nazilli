@@ -93,6 +93,7 @@
       <button class="hap" data-sayfa="sayfa-kilavuz">📖 Nasıl kullanılır?</button>
       <button class="hap" data-sayfa="sayfa-hakkinda">ℹ️ Hakkında</button>
       <button class="hap" data-sayfa="sayfa-paylas">📤 Fotoğraf paylaş</button>
+      <button class="hap" data-sayfa="sayfa-duzelt">✏️ Hata bildir</button>
       <button class="hap" data-sayfa="sayfa-giris">🏠 Giriş sayfası</button>
     </div>
     <p class="aciklama">TÜBİTAK 2204-A Lise Öğrencileri Araştırma Projeleri kapsamında araştırmacılar tarafından geliştirilmiştir.</p>
@@ -169,8 +170,9 @@
       </ul></li>
     <li><b>🚶 Rotalar.</b> Hazır rotalardan birini seçin ya da görmek istediğiniz yapıları işaretleyip kendi rotanızı oluşturun. Ok sıradaki durağı gösterir; rotadan çıkarsanız uyarılırsınız. Gidemiyorsanız <b>🎧 Evden dinle</b> ile rotayı sanal olarak dolaşın.</li>
     <li><b>🎫 Pasaport.</b> Gezdiğiniz yapılar damgalanır, rozetler kazanırsınız. Pasaportunuzu görsel olarak paylaşabilirsiniz.</li>
-    <li><b>🔎 Bu nerede?</b> Yeri bilinmeyen yapıların kartında "Yerini biliyorum"a basıp haritada yerini işaretleyin; notunuzu öğretmeninize gönderin.</li>
+    <li><b>🔎 Bu nerede?</b> Yeri bilinmeyen yapıların kartında "Yerini biliyorum"a basıp haritada yerini işaretleyin; Pasaport sekmesindeki notunuzu "Projeye gönder" ile bize iletin.</li>
     <li><b>📤 Fotoğrafını paylaş.</b> Evinizdeki albümlerde Nazilli'nin eski fotoğrafları mı var? Paylaşın; yönetici onayından sonra ilgili yapının kartında "Ziyaretçilerden" bölümünde yayınlanır.</li>
+    <li><b>✏️ Hata bildir.</b> Bir yapının yeri, bilgisi ya da fotoğrafı yanlışsa kartın altındaki "Bildir" düğmesiyle bize yazın. Yapının önündeyseniz konumunuzu da ekleyebilirsiniz; ekip kontrol edip düzeltir.</li>
     <li><b>Yerinde değilseniz:</b> Ayarlar'da <b>Deneme modu</b>nu açıp haritaya dokunarak "oradaymış gibi" gezebilirsiniz. Yapıların önündeki QR etiketlerini okutarak da kartları açabilirsiniz.</li>
   </ol>
   <div class="uyari-kutu"><b>Güvenliğiniz için:</b> Yıkık ve harap yapılara, demiryolu hattına ve antik kalıntıların üzerine girmeyin. Gezilere bir büyüğünüzle çıkın, trafiğe dikkat edin; yürürken ekrana değil yola bakın.</div>
@@ -219,6 +221,32 @@
   </form>
 </section>
 
+
+<!-- ===== Hata bildir ===== -->
+<section id="sayfa-duzelt" class="sayfa metin-sayfa" hidden aria-labelledby="duzeltBaslik">
+  <header class="sayfa-ust"><button class="hap kucuk" data-sayfa="kapat" aria-label="Kapat">✕</button></header>
+  <h2 id="duzeltBaslik">Hata bildir</h2>
+  <p class="aciklama">Bir yapının yeri, tarihi, bugünkü durumu ya da fotoğrafı hakkında yanlış veya eksik bir bilgi mi gördünüz? Yazın; araştırma ekibi kontrol edip uygulamayı düzeltir. Bildiğiniz bir kaynak (kitap, belge, aile büyüğünüzün anlattıkları) varsa eklemeniz çok işimize yarar.</p>
+  <form id="duzForm" class="pay-form">
+    <label>Hangi yapı? <select id="duzYapi"></select></label>
+    <label>Ne yanlış?
+      <select id="duzTur">
+        <option value="konum">Konumu yanlış</option>
+        <option value="bilgi">Bilgi yanlış ya da eksik</option>
+        <option value="durum">Yapının bugünkü durumu farklı (yıkıldı, onarıldı…)</option>
+        <option value="foto">Fotoğraf başka bir yapıya ait</option>
+        <option value="diger">Diğer</option>
+      </select></label>
+    <label>Açıklama <textarea id="duzMetin" maxlength="800" rows="5" required placeholder="ör. Bu hamam caminin doğusunda değil, eski PTT binasının arkasındaydı."></textarea></label>
+    <label>Kaynak (isteğe bağlı) <input id="duzKaynak" maxlength="200" placeholder="ör. bir kitap ve sayfası / dedemin anlattıkları"></label>
+    <label class="izin" id="duzKonumSatir"><input id="duzKonum" type="checkbox"> Şu an yapının tam önündeyim; bulunduğum konumu bildirime ekle.</label>
+    <p class="aciklama" id="duzNokta" hidden></p>
+    <label>İletişim (isteğe bağlı) <input id="duzIletisim" maxlength="80" placeholder="Size dönmemizi isterseniz e-posta"></label>
+    <p class="aciklama">İletişim bilgisi yalnızca araştırma ekibine iletilir, uygulamada yayınlanmaz. 18 yaşından küçükseniz iletişim bilgisi yazmadan gönderin.</p>
+    <button id="duzGonder" class="ana-btn" type="submit">Gönder</button>
+    <p id="duzDurum" class="pay-durum" role="status" aria-live="polite"></p>
+  </form>
+</section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="veri.js"></script>

@@ -74,6 +74,52 @@
   };
   function paylasAc(yapiId) { secim.value = yapiId || ''; $('#payDurum').textContent = ''; sayfaAc('sayfa-paylas'); }
 
+  // ---------- hata (düzeltme) bildirme ----------
+  const dSecim = $('#duzYapi');
+  dSecim.innerHTML = '<option value="">Genel (belirli bir yapı değil)</option>' +
+    D.yapilar.map(y => `<option value="${esc(y.id)}">${esc(y.ad)}</option>`).join('');
+  let dNokta = null; // haritada işaretlenen nokta (Yerini biliyorum)
+  function konumAl() {
+    return new Promise(ok => {
+      if (!navigator.geolocation) return ok(null);
+      navigator.geolocation.getCurrentPosition(p => ok({ lat: p.coords.latitude, lon: p.coords.longitude, dogruluk: p.coords.accuracy }),
+        () => ok(null), { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+    });
+  }
+  $('#duzForm').onsubmit = async e => {
+    e.preventDefault();
+    const durumYaz = t => { $('#duzDurum').textContent = t; };
+    const g = { yapi: dSecim.value, tur: $('#duzTur').value, metin: $('#duzMetin').value.trim(), kaynak: $('#duzKaynak').value, iletisim: $('#duzIletisim').value };
+    if (g.metin.length < 5) { durumYaz('Lütfen neyin yanlış olduğunu kısaca yazın.'); return; }
+    $('#duzGonder').disabled = true;
+    try {
+      if (dNokta) Object.assign(g, dNokta);
+      else if ($('#duzKonum').checked) {
+        durumYaz('Konumunuz alınıyor…');
+        const k = await konumAl();
+        if (k) Object.assign(g, k); else KN.bildir('Konum alınamadı; bildirim konumsuz gönderiliyor');
+      }
+      durumYaz('Gönderiliyor…');
+      const r = await fetch(SUNUCU() + '/duzeltme/gonder', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(g) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.hata || 'Gönderilemedi');
+      $('#duzForm').reset(); dNokta = null; $('#duzNokta').hidden = true; $('#duzKonumSatir').hidden = false;
+      durumYaz('Teşekkürler! Bildiriminiz araştırma ekibine ulaştı; kontrol edildikten sonra uygulama düzeltilecek.');
+      KN.bildir('Bildirim gönderildi ✏️');
+    } catch (err) {
+      durumYaz((err.message || 'Gönderilemedi') + '. İnternet bağlantınızı kontrol edip tekrar deneyin.');
+    } finally { $('#duzGonder').disabled = false; }
+  };
+  // secenek: { tur, metin, lat, lon } — dedektif notundan gelindiğinde haritada işaretlenen nokta eklenir
+  function duzeltAc(yapiId, secenek = {}) {
+    dSecim.value = yapiId || ''; $('#duzTur').value = secenek.tur || 'bilgi'; $('#duzDurum').textContent = '';
+    if (secenek.metin) $('#duzMetin').value = secenek.metin;
+    dNokta = secenek.lat != null ? { lat: secenek.lat, lon: secenek.lon, dogruluk: 0 } : null;
+    $('#duzNokta').hidden = !dNokta; $('#duzKonumSatir').hidden = !!dNokta;
+    if (dNokta) $('#duzNokta').textContent = `Haritada işaretlediğiniz nokta eklenecek: ${dNokta.lat.toFixed(5)}, ${dNokta.lon.toFixed(5)}`;
+    sayfaAc('sayfa-duzelt');
+  }
+
   // ---------- onaylı ziyaretçi fotoğrafları ----------
   let onayli = null;
   async function onaylilar() {
@@ -88,8 +134,13 @@
         <img src="${esc(SUNUCU())}/fotolar/resim/${esc(f.id)}" alt="${esc(f.aciklama || 'Ziyaretçi fotoğrafı')}" loading="lazy"
           data-alt="${esc((f.aciklama || '') + ' · ' + (f.yil || 'tarihsiz') + ' · Paylaşan: ' + f.ad)}">
         <figcaption>${esc(f.yil || 'Tarihsiz')} · ${esc(f.ad)}</figcaption></figure>`).join('')}</div>` : '')
-      + `<button class="hap" data-paylas="${esc(id)}">📤 Elinde bu yapının eski bir fotoğrafı mı var? Paylaş</button>`;
+      + `<button class="hap" data-paylas="${esc(id)}">📤 Elinde bu yapının eski bir fotoğrafı mı var? Paylaş</button>`
+      + `<button class="hap" data-duzelt="${esc(id)}">✏️ Bu kartta yanlış bir bilgi mi var? Bildir</button>`;
     kutu.querySelector('[data-paylas]').onclick = () => paylasAc(id);
+    kutu.querySelector('[data-duzelt]').onclick = () => duzeltAc(id);
   }
-  window.KN_ZIYARETCI = { kartaEkle, paylasAc };
+  window.KN_ZIYARETCI = { kartaEkle, paylasAc, duzeltAc };
+  // QR bağlantısıyla gelindiyse kart bu betik yüklenmeden açılmış olabilir; ziyaretçi bölümünü şimdi doldur
+  const ilkKart = (location.hash.match(/yapi=(KN-\d+)/) || [])[1], ilkKutu = $('#ziyaretciFotolari');
+  if (ilkKart && ilkKutu && !ilkKutu.childElementCount) kartaEkle(ilkKart, ilkKutu);
 })();

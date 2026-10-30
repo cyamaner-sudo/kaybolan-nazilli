@@ -413,8 +413,10 @@
     };
     $('#dedektifNotlari').innerHTML = dedektif.length ? dedektif.map((d, i) => `<div class="dedektif"><b>${esc(YAPI[d.yapi]?.ad || d.yapi)}</b><br>
         Konum: ${d.lat.toFixed(5)}, ${d.lon.toFixed(5)}<br>${d.not ? 'Not: ' + esc(d.not) + '<br>' : ''}<span class="kaynak">${new Date(d.tarih).toLocaleString('tr-TR')}</span>
-        <br><button class="hap kucuk" data-gonder="${i}">Öğretmene gönder</button></div>`).join('') : '<p class="aciklama">Henüz not yok. Yapılar sekmesinde "Bu nerede?" süzgecine bakın.</p>';
+        <br><button class="hap kucuk" data-proje="${i}">✏️ Projeye gönder</button> <button class="hap kucuk" data-gonder="${i}">Paylaş</button></div>`).join('') : '<p class="aciklama">Henüz not yok. Yapılar sekmesinde "Bu nerede?" süzgecine bakın.</p>';
     $('#dedektifNotlari').onclick = e => {
+      const pr = e.target.closest('[data-proje]');
+      if (pr) { const d = dedektif[+pr.dataset.proje]; if (window.KN_ZIYARETCI) window.KN_ZIYARETCI.duzeltAc(d.yapi, { tur: 'konum', metin: 'Yapının yeri burası olabilir.' + (d.not ? ' Not: ' + d.not : ''), lat: d.lat, lon: d.lon }); return; }
       const b = e.target.closest('[data-gonder]'); if (!b) return; const d = dedektif[+b.dataset.gonder];
       const metin = `Kaybolan Nazilli dedektif notu\nYapı: ${YAPI[d.yapi]?.ad} (${d.yapi})\nKonum: ${d.lat.toFixed(6)}, ${d.lon.toFixed(6)}\nhttps://www.openstreetmap.org/?mlat=${d.lat.toFixed(6)}&mlon=${d.lon.toFixed(6)}#map=19/${d.lat.toFixed(6)}/${d.lon.toFixed(6)}\nNot: ${d.not || '-'}\nTarih: ${new Date(d.tarih).toLocaleString('tr-TR')}`;
       paylas('Dedektif notu', metin, '');

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Fotoğraf Onayı</title>
+<title>Yönetici Sayfası</title>
 <style>
 :root{--bg:#faf8f4;--fg:#1f2328;--muted:#5d6670;--card:#fff;--line:#e3ded4;--accent:#8a4b2a;--ok:#2e7d32;--no:#b03a2e}
 @media (prefers-color-scheme:dark){:root{--bg:#15181c;--fg:#e9ecef;--muted:#9aa4ae;--card:#1e2329;--line:#2f363e;--accent:#e0a37e}}
@@ -29,11 +29,15 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
 .kart .dugmeler button{flex:1}
 .durum{font-weight:600;min-height:1.4em}
 .bos{color:var(--muted)}
+.bildirimler{display:grid;gap:10px}
+.bildirimler .kart .ic{gap:5px}
+.etiket{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--accent);color:#fff;font-size:.78rem;font-weight:600}
+.metin{white-space:pre-wrap;line-height:1.45}
 </style>
 </head>
 <body>
 <main>
-  <h1>Ziyaretçi fotoğrafları: onay</h1>
+  <h1>Yönetici sayfası</h1>
   <p class="aciklama">Onayladığınız fotoğraflar uygulamada ilgili yapının kartında "Ziyaretçilerden" bölümünde yayınlanır. Onaylamadan önce kontrol edin: fotoğraf Nazilli ile ilgili mi, paylaşanın hakkı var mı, tanınabilir çocuk yüzü ya da kişisel bilgi (plaka, adres, isim) içeriyor mu, açıklamada uygunsuz ifade var mı? Reddedilen fotoğraf sunucudan tamamen silinir.</p>
   <form class="giris" id="girisForm">
     <input id="sifre" type="password" autocomplete="current-password" placeholder="Yönetici şifresi" aria-label="Yönetici şifresi">
@@ -42,6 +46,9 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
   </form>
   <p class="durum" id="durum" role="status" aria-live="polite"></p>
   <section id="panel" hidden>
+    <h2>Hata bildirimleri (<span id="nDuzeltme">0</span>)</h2>
+    <p class="aciklama">Ziyaretçilerin "Hata bildir" ile gönderdikleri. Bilgiyi kaynaklardan doğrulayıp veriyi düzelttikten sonra "Çözüldü" ile listeden kaldırın.</p>
+    <div class="bildirimler" id="duzeltmeler"></div>
     <h2>Onay bekleyenler (<span id="nBekleyen">0</span>)</h2>
     <div class="liste" id="bekleyen"></div>
     <h2>Yayında (<span id="nOnayli">0</span>)</h2>
@@ -112,7 +119,44 @@ button.ret{background:var(--no);color:#fff;border-color:var(--no)}
     });
     return d;
   }
+  const TURLER = { konum: 'Konum yanlış', bilgi: 'Bilgi yanlış / eksik', durum: 'Durumu farklı', foto: 'Fotoğraf yanlış', diger: 'Diğer' };
+  function bildirimKart(b) {
+    const d = document.createElement('div'); d.className = 'kart';
+    const konum = b.lat != null ? `<div><b>Önerilen konum:</b> ${esc(b.lat)}, ${esc(b.lon)}${b.dogruluk ? ' (±' + esc(b.dogruluk) + ' m, telefon konumu)' : ' (haritada işaretlenmiş)'} ·
+        <a href="https://www.openstreetmap.org/?mlat=${encodeURIComponent(b.lat)}&mlon=${encodeURIComponent(b.lon)}#map=19/${encodeURIComponent(b.lat)}/${encodeURIComponent(b.lon)}" target="_blank" rel="noopener">Haritada aç</a></div>` : '';
+    d.innerHTML = `<div class="ic">
+        <div><span class="etiket">${esc(TURLER[b.tur] || b.tur)}</span> <b>${esc(b.yapi ? b.yapi + ' · ' + yapiAd(b.yapi) : 'Genel')}</b></div>
+        <div class="metin">${esc(b.metin)}</div>
+        ${b.kaynak ? `<div><b>Kaynak:</b> ${esc(b.kaynak)}</div>` : ''}${konum}
+        ${b.iletisim ? `<div><b>İletişim:</b> ${esc(b.iletisim)}</div>` : ''}
+        <div class="meta">${esc(new Date(b.tarih).toLocaleString('tr-TR'))} · Kayıt ${esc(b.id)}</div>
+        <div class="dugmeler"><button class="ret" data-k="coz">Çözüldü (listeden kaldır)</button></div>
+      </div>`;
+    const btn = d.querySelector('[data-k]');
+    btn.onclick = async () => {
+      if (!btn.dataset.emin) {
+        btn.dataset.emin = '1'; const eski = btn.textContent; btn.textContent = 'Emin misiniz? Kaldırmak için tekrar dokunun';
+        setTimeout(() => { if (btn.isConnected) { delete btn.dataset.emin; btn.textContent = eski; } }, 5000);
+        return;
+      }
+      btn.disabled = true;
+      try {
+        await istek('/yonetici/duzeltme-sil', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: b.id }) });
+        islenen[b.id] = { karar: 'ret', zaman: Date.now() }; try { sessionStorage.setItem('kn_islenen', JSON.stringify(islenen)); } catch (er) { /* */ }
+        durum('Bildirim kaldırıldı.'); yukle();
+      } catch (e) { durum('İşlem yapılamadı: ' + e.message); btn.disabled = false; }
+    };
+    return d;
+  }
+  async function bildirimleriYukle() {
+    try {
+      const l = (await (await istek('/yonetici/duzeltmeler')).json()).filter(b => !gizli(b, 'bekleyen'));
+      $('#nDuzeltme').textContent = l.length;
+      $('#duzeltmeler').replaceChildren(...(l.length ? l.map(bildirimKart) : [Object.assign(document.createElement('p'), { className: 'bos', textContent: 'Bekleyen hata bildirimi yok.' })]));
+    } catch (e) { $('#duzeltmeler').textContent = 'Bildirimler yüklenemedi: ' + e.message; }
+  }
   async function yukle() {
+    bildirimleriYukle();
     adresler.splice(0).forEach(u => URL.revokeObjectURL(u));
     try {
       const l = await (await istek('/yonetici/liste')).json();
