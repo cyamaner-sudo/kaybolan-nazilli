@@ -1,6 +1,6 @@
 // Otomatik üretildi: araclar/uygulama_veri.py – elle düzenlemeyin
 window.KN_VERI = {
- "surum": "20261030-1141",
+ "surum": "20261030-1147",
  "merkez": [
   37.9125,
   28.3262
