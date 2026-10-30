@@ -1,5 +1,5 @@
 // Uygulama kabuğunu, verileri ve fotoğrafları önbelleğe alır; harita karoları çevrimiçi gelir.
-const SURUM = 'kn-20261030-2151';
+const SURUM = 'kn-20261030-2200';
 const DOSYALAR = [
  "./",
  "index.html",
